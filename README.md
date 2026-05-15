@@ -25,21 +25,15 @@ git clone https://github.com/SwaraliVarghade/ShopNow.git
 
 2. Navigate to project folder
 
-```bash
 cd ShopNow
-```
 
 3. Install dependencies
 
-```bash
 npm install
-```
 
 4. Run the project
 
-```bash
 npm start
-```
 
 ## Author
 Swarali Varghade
