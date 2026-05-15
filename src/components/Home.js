@@ -34,8 +34,6 @@ function Home() {
         console.log(result.products);
         setFlag(false);
     }
-
-    let ListStyle = {"display": "inline","margin": "10px","cursor": "pointer"};
     let [wishlist, setWishlist] = useState([]);
     let [cartData, setData] = useState([]);
 
@@ -53,7 +51,7 @@ function Home() {
     }, []);
 
     let [details, setDetailObj] = useState({});
-    let [detailFlag, setDetailFlag] = useState(false);
+    let [detailFlag, setDetailFlag] = useState(false);// remve this
     let navigate = useNavigate();
     function showDetails(obj){
         setDetailObj(obj);
@@ -99,7 +97,7 @@ function Home() {
                     <h3 className="mt-3">Products</h3>
                     {
                         flag && (
-                            <div className="d-flex justify-content-center mt-4">
+                            <div className="d-flex justify-content-center mt-4" >
                                 <ul className="pagination">
                                     {[...Array(10)].map((x, i) => (
                                         <li key={i} className="page-item">

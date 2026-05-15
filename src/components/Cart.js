@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import Popup from "./Popup";
 
 function Cart() {
 
     let [Cart, setCart] = useState([]);
+    let [uniqueCart, setUniqueCart] = useState([]);
+    
 
     useEffect(() => {
         let List = [];
@@ -10,11 +13,56 @@ function Cart() {
             List = JSON.parse(localStorage.getItem('Cart'));
             setCart(List);
         }
+        let unique = List.filter((item, index, self) =>
+            index === self.findIndex(x => x.id === item.id)
+        )
+        setUniqueCart(unique);
     }, []);
 
-    let uniqueCart = Cart.filter((item, index, self) =>
-            index === self.findIndex(x => x.id === item.id)
-    );
+    let [dFlag, setdFlag] = useState(false);
+    let [dData, setData] = useState([]);
+    function decreaseCount(obj){
+        console.log(obj);
+        let count = 0;
+        Cart.filter((X, i)=>{
+            count = Cart.filter(
+                x => x.id === obj.id
+            ).length
+        });
+        if(count == 1){
+            setdFlag(true);
+            setData(obj);
+        }
+        else{
+            let index = Cart.findIndex(x => x.id == obj.id);
+
+            let updateCart = [...Cart];
+            updateCart.splice(index, 1);
+            setCart(updateCart);
+
+            localStorage.setItem('Cart', JSON.stringify(updateCart));
+                let unique = Cart.filter((item, index, self) =>
+                index === self.findIndex(x => x.id === item.id)
+            )
+            setUniqueCart(unique);
+        }
+    }
+
+    function RemoveProd(obj){
+        setdFlag(true);
+        setData(obj);
+    }
+
+    function remove(obj){
+        console.log(obj);
+        let upCart = Cart.filter((x, i)=>{
+            if(x.id !== obj.id){
+                return x;
+            }
+        });
+        setCart(upCart);
+        setUniqueCart(upCart);
+    }
 
     return (
         <>
@@ -59,7 +107,7 @@ function Cart() {
 
                                         <div className="col-md-2 text-center">
                                             <div className="d-flex justify-content-center align-items-center gap-2">
-                                                <button className="btn btn-outline-secondary"> - </button>
+                                                <button className="btn btn-outline-secondary" onClick={()=>decreaseCount(x)}> - </button>
                                                 <span className="fw-bold fs-5">
                                                     {
                                                         Cart.filter(
@@ -71,7 +119,7 @@ function Cart() {
                                             </div>
                                         </div>
                                         <div className="col-md-2 text-center">
-                                            <button className="btn btn-outline-danger w-100">
+                                            <button className="btn btn-outline-danger w-100" onClick={()=>RemoveProd(x)}>   
                                                 Remove
                                             </button>
                                         </div>
@@ -121,11 +169,14 @@ function Cart() {
                                 </h5>
                             </div>
                             <button className="btn btn-success w-100 py-2 fw-bold">
-                                Proceed To Checkout
+                                Proceed To Pay
                             </button>
                         </div>
                     </div>
                 </div>
+                {
+                    dFlag && <Popup obj={dData} removeProd={remove} closepopup={()=>setdFlag(false)}></Popup>
+                }
             </div>
         </>
     );
